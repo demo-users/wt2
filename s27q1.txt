@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voter Details</title>
+    <script>
+        function submitVoterForm() {
+            var name = document.getElementById('name').value;
+            var age = document.getElementById('age').value;
+            var nationality = document.getElementById('nationality').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById('result').innerHTML = this.responseText;
+                }
+            };
+            xhr.open("POST", "voter_app.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send("name=" + encodeURIComponent(name) + "&age=" + encodeURIComponent(age) + "&nationality=" + encodeURIComponent(nationality));
+            return false; // Prevent form reload
+        }
+    </script>
+</head>
+<body>
+    <h2>Voter Registration</h2>
+    <form onsubmit="return submitVoterForm();">
+        <label>Name (UPPERCASE only):</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label>Age (>= 18):</label><br>
+        <input type="number" id="age" name="age" required><br><br>
+
+        <label>Nationality (Indian):</label><br>
+        <input type="text" id="nationality" name="nationality" required><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="result" style="margin-top:20px; font-weight:bold;"></div>
+
+<?php
+// Handle AJAX POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['name']);
+    $age = intval($_POST['age']);
+    $nationality = trim($_POST['nationality']);
+
+    $errors = [];
+
+    // Validation
+    if (!preg_match("/^[A-Z ]+$/", $name)) {
+        $errors[] = "Name must be in UPPERCASE letters only.";
+    }
+    if ($age < 18) {
+        $errors[] = "Age must be at least 18 years.";
+    }
+    if (strcasecmp($nationality, "Indian") != 0) {
+        $errors[] = "Nationality must be Indian.";
+    }
+
+    // Display result
+    if (!empty($errors)) {
+        echo "<span style='color:red'>" . implode("<br>", $errors) . "</span>";
+    } else {
+        echo "<span style='color:green'>Voter details are valid and registered successfully!</span>";
+    }
+    exit; // Stop further HTML rendering for AJAX
+}
+?>
+</body>
+</html>

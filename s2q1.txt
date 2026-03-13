@@ -1,0 +1,93 @@
+<html>
+<body>
+
+<form action="second.php" method="post">
+
+Font Style:
+<select name="style">
+<option value="Arial">Arial</option>
+<option value="Times New Roman">Times New Roman</option>
+<option value="Courier">Courier</option>
+</select>
+
+<br><br>
+
+Font Size:
+<select name="size">
+<option value="20px">20</option>
+<option value="25px">25</option>
+<option value="30px">30</option>
+</select>
+
+<br><br>
+
+Font Color:
+<input type="color" name="color">
+
+<br><br>
+
+Background Color:
+<input type="color" name="bg">
+
+<br><br>
+
+<input type="submit" value="Submit">
+
+</form>
+
+</body>
+</html>
+
+
+//second.php
+
+<?php
+
+$style = $_POST['style'];
+$size = $_POST['size'];
+$color = $_POST['color'];
+$bg = $_POST['bg'];
+
+setcookie("style",$style,time()+3600);
+setcookie("size",$size,time()+3600);
+setcookie("color",$color,time()+3600);
+setcookie("bg",$bg,time()+3600);
+
+echo "Selected Settings <br><br>";
+
+echo "Font Style : ".$style."<br>";
+echo "Font Size : ".$size."<br>";
+echo "Font Color : ".$color."<br>";
+echo "Background Color : ".$bg."<br><br>";
+
+echo "<a href='third.php'>Apply Settings</a>";
+
+?>
+
+  //third.php
+  
+  <?php
+
+$style = $_COOKIE['style'];
+$size = $_COOKIE['size'];
+$color = $_COOKIE['color'];
+$bg = $_COOKIE['bg'];
+
+?>
+
+<html>
+
+<body style="background-color:<?php echo $bg; ?>">
+
+<p style="
+font-family:<?php echo $style; ?>;
+font-size:<?php echo $size; ?>;
+color:<?php echo $color; ?>;
+">
+
+This page shows your selected preferences using cookies.
+
+</p>
+
+</body>
+</html>

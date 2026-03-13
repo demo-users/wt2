@@ -1,0 +1,31 @@
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Step 1: Create dataset
+data = {
+    'company': ['Tata', 'MG', 'KIA', 'Hyundai'],
+    'model': ['Nexon', 'Astor', 'Seltos', 'Creta'],
+    'year': ['2017', '2021', '2019', '2015']
+}
+
+df = pd.DataFrame(data)
+print("Original Dataset:\n", df)
+
+# Step 2: Convert categorical values to numeric
+df_encoded = pd.get_dummies(df)
+print("\nEncoded Dataset:\n", df_encoded)
+
+# Different support values
+supports = [0.25, 0.5, 0.75]
+
+for s in supports:
+    print("\nMin Support =", s)
+
+    frequent_itemsets = apriori(df_encoded, min_support=s, use_colnames=True)
+    print("Frequent Itemsets:\n", frequent_itemsets)
+
+    if not frequent_itemsets.empty:
+        rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
+        print("Association Rules:\n", rules)
+    else:
+        print("No association rules found.")

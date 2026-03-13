@@ -1,0 +1,29 @@
+//html file 
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check Number</title>
+    <script>
+        function checkNumber() {
+            var num = document.getElementById("num").value;
+            num = Number(num);
+
+            if (isNaN(num)) {
+                alert("Please enter a valid number");
+            } else if (num > 0) {
+                alert("The number is positive");
+            } else if (num < 0) {
+                alert("The number is negative");
+            } else {
+                alert("The number is zero");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Check if a Number is Positive or Negative</h2>
+    <input type="text" id="num" placeholder="Enter a number">
+    <button onclick="checkNumber()">Check</button>
+</body>
+</html>

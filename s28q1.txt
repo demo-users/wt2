@@ -1,0 +1,76 @@
+CREATE DATABASE usersdb;
+
+USE usersdb;
+
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE,
+    password VARCHAR(255)
+);
+
+-- Insert some sample users
+INSERT INTO users (username, password) VALUES
+('DILIP', '12345'),
+('AMIT', 'abcde'),
+('NEHA', 'pass123');
+
+//php file
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Validation</title>
+    <script>
+        function validateLogin() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+                    document.getElementById('result').innerHTML = this.responseText;
+                }
+            };
+            xhr.open("POST", "check_login.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send("username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password));
+            return false; // Prevent form reload
+        }
+    </script>
+</head>
+<body>
+    <h2>User Login</h2>
+    <form onsubmit="return validateLogin();">
+        Username: <input type="text" id="username" name="username" required><br><br>
+        Password: <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Login">
+    </form>
+
+    <div id="result" style="margin-top:20px; font-weight:bold;"></div>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = strtoupper(trim($_POST['username'])); // Convert to uppercase
+    $password = trim($_POST['password']);
+
+    $conn = new mysqli("localhost", "root", "", "usersdb");
+    if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
+
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username=? AND password=?");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        echo "<span style='color:green'>Login Valid!</span>";
+    } else {
+        echo "<span style='color:red'>Invalid Username or Password!</span>";
+    }
+
+    $stmt->close();
+    $conn->close();
+    exit; // Stop HTML rendering for AJAX
+}
+?>
+</body>
+</html>
+

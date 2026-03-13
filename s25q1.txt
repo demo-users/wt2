@@ -1,0 +1,48 @@
+<?php
+$xmlFile = 'cricket.xml';
+
+// Step 1: Create cricket.xml with initial Australia team if it doesn't exist
+if (!file_exists($xmlFile)) {
+    $xml = new SimpleXMLElement('<CricketTeam/>');
+
+    $team = $xml->addChild('Team');
+    $team->addAttribute('country', 'Australia');
+    $player = $team->addChild('player', 'Steve Smith');
+    $team->addChild('runs', '1200');
+    $team->addChild('wicket', '50');
+
+    $player = $team->addChild('player', 'David Warner');
+    $team->addChild('runs', '1000');
+    $team->addChild('wicket', '30');
+
+    $xml->asXML($xmlFile);
+}
+
+// Step 2: Add multiple players for India team
+$xml = simplexml_load_file($xmlFile);
+
+$indiaTeam = $xml->addChild('Team');
+$indiaTeam->addAttribute('country', 'India');
+
+// Players to add for India
+$players = [
+    ['name'=>'Virat Kohli', 'runs'=>1500, 'wicket'=>25],
+    ['name'=>'Rohit Sharma', 'runs'=>1400, 'wicket'=>20],
+    ['name'=>'Jasprit Bumrah', 'runs'=>200, 'wicket'=>80]
+];
+
+foreach ($players as $p) {
+    $indiaTeam->addChild('player', $p['name']);
+    $indiaTeam->addChild('runs', $p['runs']);
+    $indiaTeam->addChild('wicket', $p['wicket']);
+}
+
+// Save the updated XML
+$xml->asXML($xmlFile);
+echo "<h3>cricket.xml updated successfully!</h3>";
+
+// Optional: Display XML content
+echo "<pre>";
+echo htmlspecialchars(file_get_contents($xmlFile));
+echo "</pre>";
+?>

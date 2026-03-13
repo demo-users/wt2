@@ -1,0 +1,35 @@
+//xml file
+
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+    <student id="1">
+        <name>Dilip Prajapati</name>
+        <age>22</age>
+        <course>BSc Computer Science</course>
+        <email>dilip@example.com</email>
+    </student>
+    <student id="2">
+        <name>Riya Sharma</name>
+        <age>21</age>
+        <course>BSc Mathematics</course>
+        <email>riya@example.com</email>
+    </student>
+    <student id="3">
+        <name>Arjun Mehta</name>
+        <age>23</age>
+        <course>BSc Physics</course>
+        <email>arjun@example.com</email>
+    </student>
+    <student id="4">
+        <name>Neha Singh</name>
+        <age>22</age>
+        <course>BSc Chemistry</course>
+        <email>neha@example.com</email>
+    </student>
+    <student id="5">
+        <name>Vikram Joshi</name>
+        <age>24</age>
+        <course>BSc Biology</course>
+        <email>vikram@example.com</email>
+    </student>
+</students>

@@ -1,0 +1,54 @@
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import sent_tokenize, word_tokenize
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Paragraph
+text = """
+Machine learning is a branch of artificial intelligence. It focuses on building systems
+that learn from data. Machine learning algorithms can identify patterns in data.
+These algorithms are widely used in applications such as recommendation systems,
+image recognition, and fraud detection.
+"""
+
+# Step 1: Remove special characters and digits
+clean_text = re.sub(r'[^a-zA-Z\s]', '', text)
+
+# Step 2: Tokenize sentences
+sentences = sent_tokenize(clean_text)
+
+# Step 3: Remove stopwords and calculate word frequency
+stop_words = set(stopwords.words('english'))
+word_freq = {}
+
+words = word_tokenize(clean_text.lower())
+
+for word in words:
+    if word not in stop_words:
+        if word not in word_freq:
+            word_freq[word] = 1
+        else:
+            word_freq[word] += 1
+
+# Step 4: Score sentences
+sent_score = {}
+
+for sent in sentences:
+    for word in word_tokenize(sent.lower()):
+        if word in word_freq:
+            if sent not in sent_score:
+                sent_score[sent] = word_freq[word]
+            else:
+                sent_score[sent] += word_freq[word]
+
+# Step 5: Generate summary (top 2 sentences)
+summary = sorted(sent_score, key=sent_score.get, reverse=True)[:2]
+
+print("Original Text:\n", text)
+print("\nCleaned Text:\n", clean_text)
+print("\nSummary:")
+for s in summary:
+    print(s)

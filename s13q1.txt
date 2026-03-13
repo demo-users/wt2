@@ -1,0 +1,42 @@
+  // html file
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Name Checker</title>
+    <style>
+        input {
+            padding: 5px;
+            font-size: 16px;
+        }
+        #message {
+            margin-top: 10px;
+            font-size: 18px;
+            color: blue;
+        }
+    </style>
+    <script>
+        function checkName() {
+            var name = document.getElementById("username").value.trim();
+            var message = "";
+
+            if(name === "") {
+                message = "Stranger, please tell me your name!";
+            } 
+            else if(name === "Rohit" || name === "Virat" || name === "Dhoni" || name === "Ashwin" || name === "Harbhajan") {
+                message = "Hello, master !";
+            } 
+            else {
+                message = name + ", I don’t know you!";
+            }
+
+            document.getElementById("message").innerHTML = message;
+        }
+    </script>
+</head>
+<body>
+    <h2>Live Name Checker</h2>
+    <label>Enter your name: </label>
+    <input type="text" id="username" onkeyup="checkName()" placeholder="Type your name here...">
+    <div id="message"></div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+# Import required libraries
+import pandas as pd
+import nltk
+from nltk.tokenize import word_tokenize
+from textblob import TextBlob
+
+# Download NLTK tokenizer models if not already done
+nltk.download('punkt')
+
+# i. Read the dataset
+df = pd.read_csv("covid_2021_1.csv")  # replace with your file path
+
+# Display first 5 rows
+print("First 5 rows of dataset:")
+print(df.head(), "\n")
+
+# 1. Data cleaning: remove NaN in comments
+df['comment_text'] = df['comment_text'].fillna('')
+
+# ii. Tokenize comments into words
+df['tokens'] = df['comment_text'].apply(lambda x: word_tokenize(x))
+
+print("Sample tokenized comments:")
+print(df['tokens'].head(), "\n")
+
+# iii. Perform sentiment analysis
+def get_sentiment(text):
+    analysis = TextBlob(text)
+    if analysis.sentiment.polarity > 0:
+        return 'Positive'
+    elif analysis.sentiment.polarity < 0:
+        return 'Negative'
+    else:
+        return 'Neutral'
+
+df['sentiment'] = df['comment_text'].apply(get_sentiment)
+
+# Calculate percentages
+total_comments = len(df)
+positive_pct = (df['sentiment'].value_counts().get('Positive',0)/total_comments)*100
+negative_pct = (df['sentiment'].value_counts().get('Negative',0)/total_comments)*100
+neutral_pct = (df['sentiment'].value_counts().get('Neutral',0)/total_comments)*100
+
+print("=== Sentiment Analysis Percentages ===")
+print(f"Positive: {positive_pct:.2f}%")
+print(f"Negative: {negative_pct:.2f}%")
+print(f"Neutral : {neutral_pct:.2f}%")

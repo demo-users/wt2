@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>JavaScript Program</title>
+<script type="text/javascript">
+
+// Display alert message
+alert("Exams are near, have you started preparing for?");
+
+// Accept two numbers from user
+var num1 = prompt("Enter first number:");
+var num2 = prompt("Enter second number:");
+
+// Convert string to integer
+num1 = parseInt(num1);
+num2 = parseInt(num2);
+
+// Confirm box
+var check = confirm("Do you want to find addition of these numbers?");
+
+// Display addition
+if(check == true)
+{
+    var sum = num1 + num2;
+    alert("Addition of two numbers is: " + sum);
+}
+else
+{
+    alert("Addition cancelled.");
+}
+
+</script>
+</head>
+<body>
+</body>
+</html>
+
+//csv file 
+
+Milk,Bread,Butter,Cheese,Diaper,Eggs,Coke
+1,1,0,0,1,1,0
+1,1,0,0,0,1,0
+0,1,1,0,1,0,1
+1,0,1,0,1,0,1
+0,1,0,1,0,1,1

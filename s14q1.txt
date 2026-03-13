@@ -1,0 +1,122 @@
+  //html file
+<html>
+<head>
+<script>
+function showTeacher(str)
+{
+var xmlhttp=new XMLHttpRequest();
+
+xmlhttp.onreadystatechange=function()
+{
+if(this.readyState==4 && this.status==200)
+{
+document.getElementById("result").innerHTML=this.responseText;
+}
+};
+
+xmlhttp.open("GET","s14q1.php?tname="+str,true);
+xmlhttp.send();
+}
+</script>
+</head>
+
+<body>
+
+<h2>Select Teacher</h2>
+
+<select onchange="showTeacher(this.value)">
+<option value="">Select Teacher</option>
+<option value="Amit">Amit</option>
+<option value="Rohit">Rohit</option>
+<option value="Sneha">Sneha</option>
+</select>
+
+<br><br>
+
+<div id="result"></div>
+
+</body>
+</html>
+
+// database creation process
+ilipprajapati@UBUNTU:~$ CREATE DATABASE college;
+USE college;
+CREATE: command not found
+USE: command not found
+dilipprajapati@UBUNTU:~$ sudo service mysql start
+[sudo] password for dilipprajapati: 
+dilipprajapati@UBUNTU:~$ mysql -u root -p
+Enter password: 
+ERROR 1698 (28000): Access denied for user 'root'@'localhost'
+dilipprajapati@UBUNTU:~$ sudo mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 51
+Server version: 8.0.45-0ubuntu0.24.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE college;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> USE college;
+Database changed
+mysql> CREATE TABLE TEACHER(
+    -> tno INT PRIMARY KEY,
+    -> tname VARCHAR(50),
+    -> qualification VARCHAR(50),
+    -> salary INT
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO TEACHER VALUES
+    -> (1,'Amit','MSc',40000),
+    -> (2,'Rohit','MCA',45000),
+    -> (3,'Sneha','PhD',60000);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM TEACHER;
++-----+-------+---------------+--------+
+| tno | tname | qualification | salary |
++-----+-------+---------------+--------+
+|   1 | Amit  | MSc           |  40000 |
+|   2 | Rohit | MCA           |  45000 |
+|   3 | Sneha | PhD           |  60000 |
++-----+-------+---------------+--------+
+3 rows in set (0.00 sec)
+
+
+//php file 
+
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors',1);
+
+$conn = mysqli_connect("localhost","ajaxuser","1234","college");
+
+if(!$conn)
+{
+die("Connection Failed: ".mysqli_connect_error());
+}
+
+$name = $_GET['tname'];
+
+$sql = "SELECT * FROM TEACHER WHERE tname='$name'";
+$result = mysqli_query($conn,$sql);
+
+while($row = mysqli_fetch_array($result))
+{
+echo "Teacher No: ".$row['tno']."<br>";
+echo "Name: ".$row['tname']."<br>";
+echo "Qualification: ".$row['qualification']."<br>";
+echo "Salary: ".$row['salary']."<br>";
+}
+
+mysqli_close($conn);
+?>

@@ -1,0 +1,83 @@
+<?php
+// Create student.xml if it doesn't exist
+$xmlFile = 'student.xml';
+
+if (!file_exists($xmlFile)) {
+    $students = [
+        ['rollno'=>1, 'name'=>'Dilip', 'address'=>'Nasik', 'college'=>'SPPU', 'course'=>'BSc'],
+        ['rollno'=>2, 'name'=>'Amit', 'address'=>'Pune', 'college'=>'SPPU', 'course'=>'BSc'],
+        ['rollno'=>3, 'name'=>'Neha', 'address'=>'Mumbai', 'college'=>'SPPU', 'course'=>'BCom'],
+        ['rollno'=>4, 'name'=>'Ravi', 'address'=>'Nagpur', 'college'=>'SPPU', 'course'=>'BSc'],
+        ['rollno'=>5, 'name'=>'Priya', 'address'=>'Pune', 'college'=>'SPPU', 'course'=>'BCom'],
+    ];
+
+    $xml = new SimpleXMLElement('<students/>');
+
+    foreach ($students as $s) {
+        $student = $xml->addChild('student');
+        $student->addChild('rollno', $s['rollno']);
+        $student->addChild('name', $s['name']);
+        $student->addChild('address', $s['address']);
+        $student->addChild('college', $s['college']);
+        $student->addChild('course', $s['course']);
+    }
+
+    $xml->asXML($xmlFile);
+}
+
+// Handle form submission
+$selectedCourse = '';
+$filteredStudents = [];
+
+if (isset($_POST['course'])) {
+    $selectedCourse = trim($_POST['course']);
+    if (!empty($selectedCourse)) {
+        $xml = simplexml_load_file($xmlFile);
+        foreach ($xml->student as $student) {
+            if (strcasecmp($student->course, $selectedCourse) == 0) { // case-insensitive
+                $filteredStudents[] = $student;
+            }
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student XML</title>
+</head>
+<body>
+    <h2>Filter Students by Course</h2>
+
+    <form method="post" action="">
+        Enter Course: 
+        <input type="text" name="course" value="<?= htmlspecialchars($selectedCourse) ?>" required>
+        <input type="submit" value="Search">
+    </form>
+
+    <?php if (!empty($filteredStudents)) : ?>
+        <h3>Students in Course: <?= htmlspecialchars($selectedCourse) ?></h3>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>College</th>
+                <th>Course</th>
+            </tr>
+            <?php foreach ($filteredStudents as $s) : ?>
+            <tr>
+                <td><?= $s->rollno ?></td>
+                <td><?= $s->name ?></td>
+                <td><?= $s->address ?></td>
+                <td><?= $s->college ?></td>
+                <td><?= $s->course ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST') : ?>
+        <p>No students found for course "<?= htmlspecialchars($selectedCourse) ?>"</p>
+    <?php endif; ?>
+</body>
+</html>

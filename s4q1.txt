@@ -1,0 +1,107 @@
+//php file
+<?php
+session_start();
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Details</title>
+</head>
+<body>
+    <h2>Employee Details</h2>
+    <form method="post" action="page2.php">
+        <label>Employee Number (Eno):</label>
+        <input type="text" name="eno" required><br><br>
+
+        <label>Employee Name (Ename):</label>
+        <input type="text" name="ename" required><br><br>
+
+        <label>Address:</label>
+        <input type="text" name="address" required><br><br>
+
+        <input type="submit" value="Next">
+    </form>
+</body>
+</html>
+
+//page2.php
+
+<?php
+session_start();
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $_SESSION['eno'] = $_POST['eno'];
+    $_SESSION['ename'] = $_POST['ename'];
+    $_SESSION['address'] = $_POST['address'];
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Earnings</title>
+</head>
+<body>
+    <h2>Employee Earnings</h2>
+    <form method="post" action="page3.php">
+        <label>Basic Salary:</label>
+        <input type="number" name="basic" required><br><br>
+
+        <label>DA:</label>
+        <input type="number" name="da" required><br><br>
+
+        <label>HRA:</label>
+        <input type="number" name="hra" required><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+
+//page3.php
+
+  <?php
+session_start();
+
+// Save earnings from page2 to session
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $_SESSION['basic'] = $_POST['basic'];
+    $_SESSION['da'] = $_POST['da'];
+    $_SESSION['hra'] = $_POST['hra'];
+}
+
+// Calculate total
+$total = $_SESSION['basic'] + $_SESSION['da'] + $_SESSION['hra'];
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Information</title>
+</head>
+<body>
+    <h2>Employee Information</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Eno</th>
+            <th>Ename</th>
+            <th>Address</th>
+            <th>Basic</th>
+            <th>DA</th>
+            <th>HRA</th>
+            <th>Total</th>
+        </tr>
+        <tr>
+            <td><?php echo $_SESSION['eno']; ?></td>
+            <td><?php echo $_SESSION['ename']; ?></td>
+            <td><?php echo $_SESSION['address']; ?></td>
+            <td><?php echo $_SESSION['basic']; ?></td>
+            <td><?php echo $_SESSION['da']; ?></td>
+            <td><?php echo $_SESSION['hra']; ?></td>
+            <td><?php echo $total; ?></td>
+        </tr>
+    </table>
+</body>
+</html>

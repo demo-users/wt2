@@ -1,0 +1,46 @@
+# Step 1: Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Step 2: Create the dataset
+data = {
+    'Height': [150, 160, 170, 180, 155, 165, 175, 185, 158, 168],
+    'Weight': [50, 60, 65, 80, 55, 63, 70, 85, 58, 67],
+    'Purchases': [200, 250, 300, 400, 220, 270, 320, 450, 230, 280]
+}
+
+df = pd.DataFrame(data)
+print("Dataset:")
+print(df)
+
+# Step 3: Identify independent (X) and target (y) variables
+X = df[['Height', 'Weight']]   # Independent variables
+y = df['Purchases']            # Target variable
+
+# Step 4: Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+print("\nTraining Features (X_train):")
+print(X_train)
+print("\nTesting Features (X_test):")
+print(X_test)
+print("\nTraining Target (y_train):")
+print(y_train)
+print("\nTesting Target (y_test):")
+print(y_test)
+
+# Step 5: Build a simple linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Step 6: Predict purchases on test set
+y_pred = model.predict(X_test)
+print("\nPredicted Purchases:")
+print(y_pred)
+
+# Step 7: Print model coefficients
+print("\nModel Coefficients:")
+print(f"Height coefficient: {model.coef_[0]}")
+print(f"Weight coefficient: {model.coef_[1]}")
+print(f"Intercept: {model.intercept_}")S

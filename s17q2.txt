@@ -1,0 +1,43 @@
+import re
+import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Given paragraph
+text = """So, keep working. Keep striving. Never give up. Fall down seven times, get up eight.
+Ease is a greater threat to progress than hardship. Ease is a greater threat to progress than hardship.
+So, keep moving, keep growing, keep learning. See you at work."""
+
+# Sentence tokenization
+sentences = sent_tokenize(text)
+
+# Remove special characters and digits
+clean_text = re.sub(r'[^a-zA-Z\s]', '', text)
+
+# Remove stopwords and calculate word frequency
+stop_words = set(stopwords.words('english'))
+word_freq = {}
+
+for word in word_tokenize(clean_text.lower()):
+    if word not in stop_words:
+        word_freq[word] = word_freq.get(word,0) + 1
+
+# Sentence scoring
+sent_score = {}
+for sent in sentences:
+    for word in word_tokenize(sent.lower()):
+        if word in word_freq:
+            sent_score[sent] = sent_score.get(sent,0) + word_freq[word]
+
+# Select top 2 sentences as summary
+summary = sorted(sent_score, key=sent_score.get, reverse=True)[:2]
+
+print("Cleaned Text:")
+print(clean_text)
+
+print("\nSummary:")
+for s in summary:
+    print(s)

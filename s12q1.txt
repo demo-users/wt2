@@ -1,0 +1,58 @@
+//html file
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX Contact Reader</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #contactTable {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function printContacts() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === 4 && xhr.status === 200) {
+                    var lines = xhr.responseText.trim().split("\n");
+                    var table = "<table>";
+                    table += "<tr><th>Sr No</th><th>Name</th><th>Residence No</th><th>Mobile No</th><th>Address</th></tr>";
+
+                    for(var i=0; i<lines.length; i++) {
+                        var fields = lines[i].split(",");
+                        table += "<tr>";
+                        for(var j=0; j<fields.length; j++) {
+                            table += "<td>" + fields[j] + "</td>";
+                        }
+                        table += "</tr>";
+                    }
+
+                    table += "</table>";
+                    document.getElementById("contactTable").innerHTML = table;
+                }
+            };
+            xhr.open("GET", "contact.dat", true);
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <h2>Contact List</h2>
+    <button onclick="printContacts()">Print Contacts</button>
+    <div id="contactTable"></div>
+</body>
+</html>
+
+//dat file contact.dat
+
+1,John Doe,12345,9876543210,123 Street A
+2,Jane Smith,54321,8765432109,456 Street B
+3,Robert Brown,67890,7654321098,789 Street C

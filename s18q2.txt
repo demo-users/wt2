@@ -1,0 +1,43 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize, sent_tokenize
+from collections import Counter
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+
+# Download resources
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Text paragraph
+text = "Keep working and keep learning. Never give up. Work hard to achieve success."
+
+# Sentence Tokenization
+sentences = sent_tokenize(text)
+print("Sentences:", sentences)
+
+# Word Tokenization
+words = word_tokenize(text.lower())
+
+# Remove Stopwords
+stop_words = set(stopwords.words('english'))
+filtered_words = [w for w in words if w.isalpha() and w not in stop_words]
+
+print("Words after removing stopwords:", filtered_words)
+
+# Word Frequency
+freq = Counter(filtered_words)
+print("Word Frequency:", freq)
+
+# Plot Frequency
+plt.bar(freq.keys(), freq.values())
+plt.xlabel("Words")
+plt.ylabel("Frequency")
+plt.title("Word Frequency Distribution")
+plt.show()
+
+# WordCloud
+wc = WordCloud(background_color='white').generate(" ".join(filtered_words))
+plt.imshow(wc)
+plt.axis("off")
+plt.show()

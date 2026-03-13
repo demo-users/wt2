@@ -1,0 +1,26 @@
+//html file 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jQuery before() and after() Example</title>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h2>jQuery before() and after() Example</h2>
+
+    <p id="myParagraph">This is the original paragraph.</p>
+
+    <script>
+        $(document).ready(function() {
+            // Insert text before the paragraph
+            $("#myParagraph").before("<p>This text is inserted BEFORE the paragraph.</p>");
+
+            // Insert text after the paragraph
+            $("#myParagraph").after("<p>This text is inserted AFTER the paragraph.</p>");
+        });
+    </script>
+
+</body>
+</html>

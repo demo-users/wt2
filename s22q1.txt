@@ -1,0 +1,57 @@
+//php file
+
+<?php
+// Database credentials
+$host = "localhost";
+$user = "root";
+$pass = "";
+$dbname = "school";
+
+// Connect to MySQL
+$conn = new mysqli($host, $user, $pass);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Create database if not exists
+$conn->query("CREATE DATABASE IF NOT EXISTS $dbname");
+$conn->select_db($dbname);
+
+// Create student table if not exists
+$sql_create = "CREATE TABLE IF NOT EXISTS student (
+    rollno INT(5) PRIMARY KEY,
+    name VARCHAR(50),
+    class VARCHAR(10)
+)";
+$conn->query($sql_create);
+
+// Insert 5 records
+$students = [
+    [1, 'Dilip', 'BSc'],
+    [2, 'Amit', 'BSc'],
+    [3, 'Neha', 'BSc'],
+    [4, 'Priya', 'BSc'],
+    [5, 'Rahul', 'BSc']
+];
+
+// Insert only if table empty
+$result = $conn->query("SELECT COUNT(*) as count FROM student");
+$row = $result->fetch_assoc();
+if($row['count'] == 0){
+    foreach($students as $s){
+        $conn->query("INSERT INTO student (rollno,name,class) VALUES ($s[0],'$s[1]','$s[2]')");
+    }
+    echo "5 student records inserted successfully!<br><br>";
+}
+
+// Display all students
+$res = $conn->query("SELECT * FROM student");
+echo "<h3>Student Records:</h3>";
+while($row = $res->fetch_assoc()){
+    echo "Roll No: ".$row['rollno']." | Name: ".$row['name']." | Class: ".$row['class']."<br>";
+}
+
+$conn->close();
+?>

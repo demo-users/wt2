@@ -1,0 +1,33 @@
+# 1) Import required libraries
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# 2) Create the dataset
+dataset = [
+    ['Apple', 'Mango', 'Banana'],
+    ['Mango', 'Banana', 'Cabbage', 'Carrots'],
+    ['Mango', 'Banana', 'Carrots'],
+    ['Mango', 'Carrots']
+]
+
+# 3) One-hot encode the dataset
+all_items = sorted(set(item for transaction in dataset for item in transaction))
+encoded_vals = []
+for transaction in dataset:
+    encoded_vals.append({item: (item in transaction) for item in all_items})
+
+df = pd.DataFrame(encoded_vals)
+print("One-hot Encoded Dataset:\n")
+print(df)
+
+# 4) Apply Apriori algorithm for different min_support values
+min_support_values = [0.25, 0.5, 0.75]
+
+for min_sup in min_support_values:
+    print(f"\n--- Frequent Itemsets for min_support = {min_sup} ---")
+    frequent_itemsets = apriori(df, min_support=min_sup, use_colnames=True)
+    print(frequent_itemsets)
+    
+    # 5) Generate association rules
+    rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+    print(f"\nAssociation Rules (confidence >= 0.7) for min_support = {min_sup}:\n", rules)

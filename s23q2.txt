@@ -1,0 +1,12 @@
+import re
+
+# Sample paragraph
+text = "Hello all! Welcome to Python Programming 101. This Academy, @Python, teaches 100% practical skills."
+
+# Remove digits and special characters (keep only letters and spaces)
+cleaned_text = re.sub(r'[^A-Za-z\s]', '', text)
+
+# Optional: remove extra spaces
+cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
+
+print(cleaned_text)

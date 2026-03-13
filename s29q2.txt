@@ -1,0 +1,68 @@
+# Import libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# =========================
+# Step 1: Create Sample Student Score Dataset
+# =========================
+# Score out of 100, Pass if score >= 50 else Fail
+data = {
+    'Score': [35, 42, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95],
+    'Pass': [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+}
+
+df = pd.DataFrame(data)
+print("=== Student Score Dataset ===")
+print(df)
+
+# =========================
+# Step 2: Prepare Data
+# =========================
+X = df[['Score']]  # Feature
+y = df['Pass']     # Target (0=Fail, 1=Pass)
+
+# Split into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# =========================
+# Step 3: Train Logistic Regression Model
+# =========================
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# =========================
+# Step 4: Make Predictions
+# =========================
+y_pred = model.predict(X_test)
+
+# =========================
+# Step 5: Evaluate Model
+# =========================
+accuracy = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+report = classification_report(y_test, y_pred)
+
+print("\nAccuracy:", accuracy)
+print("\nConfusion Matrix:\n", cm)
+print("\nClassification Report:\n", report)
+
+# =========================
+# Step 6: Visualize Logistic Curve
+# =========================
+import numpy as np
+
+# Generate range of scores for curve
+score_range = np.linspace(0, 100, 500).reshape(-1,1)
+prob_pass = model.predict_proba(score_range)[:,1]  # Probability of passing
+
+plt.scatter(X, y, color='blue', label='Actual Data')
+plt.plot(score_range, prob_pass, color='red', linewidth=2, label='Logistic Curve')
+plt.xlabel('Score')
+plt.ylabel('Probability of Passing')
+plt.title('Logistic Regression: Score vs Pass Probability')
+plt.legend()
+plt.show()

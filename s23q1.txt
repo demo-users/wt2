@@ -1,0 +1,52 @@
+//php file
+
+<?php
+// Database configuration
+$host = "localhost";
+$user = "root";
+$pass = "";
+$dbname = "school";
+
+// Create connection
+$conn = new mysqli($host, $user, $pass, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch all students
+$sql = "SELECT * FROM student";
+$result = $conn->query($sql);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Records</title>
+</head>
+<body>
+    <h2>Student Records</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>Class</th>
+        </tr>
+        <?php
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo "<tr>
+                        <td>".$row['rollno']."</td>
+                        <td>".$row['name']."</td>
+                        <td>".$row['class']."</td>
+                      </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='3'>No records found</td></tr>";
+        }
+        $conn->close();
+        ?>
+    </table>
+</body>
+</html>

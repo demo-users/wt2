@@ -1,0 +1,37 @@
+# Import required libraries
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+import pandas as pd
+
+# Step 1: Create a sample transactions dataset
+transactions = [
+    ['Milk', 'Bread', 'Eggs'],
+    ['Milk', 'Diaper', 'Beer', 'Eggs'],
+    ['Bread', 'Diaper', 'Beer', 'Cola'],
+    ['Milk', 'Bread', 'Diaper', 'Beer'],
+    ['Milk', 'Bread', 'Diaper', 'Cola'],
+    ['Bread', 'Eggs', 'Milk'],
+    ['Bread', 'Diaper', 'Milk', 'Beer']
+]
+
+print("Sample Transactions Dataset:")
+for i, t in enumerate(transactions, 1):
+    print(f"Transaction {i}: {t}")
+
+# Step 2: Convert dataset into one-hot encoded format
+te = TransactionEncoder()
+te_ary = te.fit(transactions).transform(transactions)
+df = pd.DataFrame(te_ary, columns=te.columns_)
+
+print("\nOne-Hot Encoded Dataset:")
+print(df)
+
+# Step 3: Apply Apriori algorithm
+frequent_itemsets = apriori(df, min_support=0.5, use_colnames=True)
+print("\nFrequent Itemsets (min_support=0.5):")
+print(frequent_itemsets)
+
+# Step 4: Generate Association Rules
+rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+print("\nAssociation Rules (min_confidence=0.7):")
+print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])

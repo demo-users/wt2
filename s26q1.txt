@@ -1,0 +1,88 @@
+CREATE DATABASE company;
+
+USE company;
+
+CREATE TABLE EMP (
+    eno INT PRIMARY KEY,
+    ename VARCHAR(50),
+    designation VARCHAR(50),
+    salary DECIMAL(10,2)
+);
+
+INSERT INTO EMP (eno, ename, designation, salary) VALUES
+(1, 'Dilip', 'Manager', 50000),
+(2, 'Amit', 'Developer', 40000),
+(3, 'Neha', 'Designer', 35000),
+(4, 'Ravi', 'Tester', 30000),
+(5, 'Priya', 'HR', 45000);
+
+
+
+//php file
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Details</title>
+    <script>
+        function getEmployeeDetails(eno) {
+            if (eno == "") {
+                document.getElementById("details").innerHTML = "";
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("details").innerHTML = this.responseText;
+                }
+            };
+            xhr.open("GET", "employee.php?eno=" + eno, true);
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <h2>Employee Details</h2>
+
+    <?php
+    $conn = new mysqli("localhost", "root", "", "company");
+    if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
+
+    // If AJAX request
+    if (isset($_GET['eno'])) {
+        $eno = (int)$_GET['eno'];
+        $sql = "SELECT * FROM EMP WHERE eno = $eno";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            echo "<table border='1' cellpadding='5' cellspacing='0'>
+                    <tr><th>Employee No</th><td>{$row['eno']}</td></tr>
+                    <tr><th>Name</th><td>{$row['ename']}</td></tr>
+                    <tr><th>Designation</th><td>{$row['designation']}</td></tr>
+                    <tr><th>Salary</th><td>{$row['salary']}</td></tr>
+                  </table>";
+        } else {
+            echo "Employee not found";
+        }
+        exit;
+    }
+
+    // Dropdown for all employee names
+    $sql = "SELECT eno, ename FROM EMP";
+    $result = $conn->query($sql);
+    ?>
+
+    <label>Select Employee:</label>
+    <select onchange="getEmployeeDetails(this.value)">
+        <option value="">--Select--</option>
+        <?php
+        while ($row = $result->fetch_assoc()) {
+            echo "<option value='{$row['eno']}'>{$row['ename']}</option>";
+        }
+        ?>
+    </select>
+
+    <div id="details" style="margin-top:20px;"></div>
+</body>
+</html>

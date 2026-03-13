@@ -1,0 +1,46 @@
+# Import required libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+
+# Step 1: Create User Data (Feature and Target)
+# Example: Hours_Active vs Purchase_Amount
+data = {
+    'Hours_Active': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'Purchase_Amount': [100, 150, 200, 250, 300, 320, 360, 400, 450, 500]
+}
+
+df = pd.DataFrame(data)
+
+# Step 2: Separate feature and target
+X = df[['Hours_Active']]  # Independent variable
+y = df['Purchase_Amount']  # Dependent variable
+
+# Step 3: Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 4: Create Linear Regression Model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Step 5: Make Predictions
+y_pred = model.predict(X_test)
+
+# Step 6: Visualize the Regression Line
+plt.scatter(X, y, color='blue', label='Actual Data')
+plt.plot(X, model.predict(X), color='red', label='Regression Line')
+plt.xlabel('Hours Active')
+plt.ylabel('Purchase Amount')
+plt.title('Simple Linear Regression - User Data')
+plt.legend()
+plt.show()
+
+# Step 7: Print Model Coefficients
+print("Slope (m):", model.coef_[0])
+print("Intercept (b):", model.intercept_)
+
+# Step 8: Predict for new user data (optional)
+new_hours = [[12]]  # Example: 12 hours active
+predicted_purchase = model.predict(new_hours)
+print(f"Predicted Purchase Amount for {new_hours[0][0]} hours active: {predicted_purchase[0]}")

@@ -1,0 +1,58 @@
+<?php
+$xmlFile = 'Bookcategory.xml';
+
+// Create root element
+$xml = new SimpleXMLElement('<Bookstore/>');
+
+// 1️⃣ Yoga Category
+$yogaBooks = [
+    ['title'=>'Yoga for Beginners', 'author'=>'John Doe', 'price'=>250],
+    ['title'=>'Advanced Yoga', 'author'=>'Jane Smith', 'price'=>400]
+];
+
+$yoga = $xml->addChild('Yoga');
+foreach ($yogaBooks as $b) {
+    $book = $yoga->addChild('Book');
+    $book->addChild('Book_Title', $b['title']);
+    $book->addChild('Book_Author', $b['author']);
+    $book->addChild('Book_Price', $b['price']);
+}
+
+// 2️⃣ Story Category
+$storyBooks = [
+    ['title'=>'The Adventures', 'author'=>'Robert Brown', 'price'=>300],
+    ['title'=>'Mystery Tales', 'author'=>'Alice Green', 'price'=>350]
+];
+
+$story = $xml->addChild('Story');
+foreach ($storyBooks as $b) {
+    $book = $story->addChild('Book');
+    $book->addChild('Book_Title', $b['title']);
+    $book->addChild('Book_Author', $b['author']);
+    $book->addChild('Book_Price', $b['price']);
+}
+
+// 3️⃣ Technical Category
+$technicalBooks = [
+    ['title'=>'Learn PHP', 'author'=>'Mark White', 'price'=>500],
+    ['title'=>'JavaScript Essentials', 'author'=>'Emma Black', 'price'=>450]
+];
+
+$technical = $xml->addChild('Technical');
+foreach ($technicalBooks as $b) {
+    $book = $technical->addChild('Book');
+    $book->addChild('Book_Title', $b['title']);
+    $book->addChild('Book_Author', $b['author']);
+    $book->addChild('Book_Price', $b['price']);
+}
+
+// Save XML to file
+$xml->asXML($xmlFile);
+
+echo "<h3>Bookcategory.xml created successfully!</h3>";
+
+// Optional: Display XML content
+echo "<pre>";
+echo htmlspecialchars(file_get_contents($xmlFile));
+echo "</pre>";
+?>

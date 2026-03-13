@@ -1,0 +1,32 @@
+# i. Import required library
+import pandas as pd
+
+# ii. Load dataset
+# Make sure 'INvideos.csv' is in your working directory, or give full path
+df = pd.read_csv("INvideos.csv")
+
+# 1. Display first few rows to understand structure
+print("First 5 rows of dataset:")
+print(df.head(), "\n")
+
+# 2. Check for missing values
+print("Missing values in each column:")
+print(df.isnull().sum(), "\n")
+
+# 3. Simple data cleaning: fill missing numerical values with 0
+numeric_cols = ["views", "likes", "dislikes", "comment_count"]
+df[numeric_cols] = df[numeric_cols].fillna(0)
+
+print("Shape after cleaning:", df.shape, "\n")
+
+# ii. Compute total views, likes, dislikes, and comment count
+total_views = df["views"].sum()
+total_likes = df["likes"].sum()
+total_dislikes = df["dislikes"].sum()
+total_comments = df["comment_count"].sum()
+
+print("=== Total Engagement Metrics ===")
+print("Total Views       :", total_views)
+print("Total Likes       :", total_likes)
+print("Total Dislikes    :", total_dislikes)
+print("Total Comment Count:", total_comments)

@@ -1,0 +1,45 @@
+// html file 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Name Validation</title>
+</head>
+<body onload="pageLoad()">
+
+<h2>Enter Student Name</h2>
+<input type="text" id="name" placeholder="Enter name" onblur="checkName()" onclick="showImage()">
+<p id="msg"></p>
+<img id="img" src="https://via.placeholder.com/100" 
+     style="display:none;" 
+     onmouseover="img.style.width='150px'; img.style.height='150px';" 
+     onclick="img.style.width='200px'; img.style.height='200px';" 
+     onmouseup="img.style.width='100px'; img.style.height='100px';">
+
+<script>
+function pageLoad(){
+    // onload event
+}
+
+function checkName(){
+    var n = document.getElementById("name").value;
+    var msg = document.getElementById("msg");
+    var img = document.getElementById("img");
+
+    if(n.trim() != ""){
+        msg.style.color = "red";
+        msg.style.fontSize = "18px";
+        msg.innerHTML = "Student Name: " + n;
+        img.style.display = "none";
+    }
+}
+
+function showImage(){
+    var n = document.getElementById("name").value;
+    if(n.trim() == ""){
+        document.getElementById("img").style.display = "block";
+    }
+}
+</script>
+
+</body>
+</html>

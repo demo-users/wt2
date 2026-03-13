@@ -1,0 +1,47 @@
+# 1) Import libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+from sklearn.linear_model import LinearRegression
+
+# 2) Download & load the Nursery dataset (UCI)
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/nursery/nursery.data"
+col_names = ["parents","has_nurs","form","children","housing","finance","social","health","class"]
+data = pd.read_csv(url, names=col_names)
+
+# 3) Inspect top rows
+print("First 5 rows of the dataset:\n", data.head())
+
+# 4) Separate features and target
+X = data.drop("class", axis=1)
+y = data["class"]
+
+# 5) Encode the categorical target to numeric for regression
+label_encoder = LabelEncoder()
+y_encoded = label_encoder.fit_transform(y)  # e.g., recommend->0, priority->1, not_recom->2
+
+# 6) One‑hot encode the independent categorical features (fixed for latest scikit-learn)
+encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
+X_encoded = encoder.fit_transform(X)
+
+print("\nFeatures after one‑hot encoding shape:", X_encoded.shape)
+
+# 7) Train‑test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X_encoded, y_encoded, test_size=0.3, random_state=42
+)
+
+# Print shapes
+print("\nTraining features shape:", X_train.shape)
+print("Test features shape:", X_test.shape)
+print("Training target shape:", y_train.shape)
+print("Test target shape:", y_test.shape)
+
+# 8) Build a simple Linear Regression model
+linreg = LinearRegression()
+linreg.fit(X_train, y_train)
+
+# Predictions on test
+y_pred = linreg.predict(X_test)
+
+print("\nPredicted values (first 10):", y_pred[:10])

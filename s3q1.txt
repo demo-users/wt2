@@ -1,0 +1,44 @@
+<?php
+session_start();
+
+// Correct username and password
+$correct_username = "admin";
+$correct_password = "12345";
+
+// Initialize login attempts
+if (!isset($_SESSION['attempts'])) {
+    $_SESSION['attempts'] = 0;
+}
+
+// Check if form submitted
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    if ($username === $correct_username && $password === $correct_password) {
+        // Successful login - show second form
+        $_SESSION['loggedin'] = true;
+        echo "<h2>Welcome message!</h2>";
+        ?>
+        
+        <?php
+        exit;
+    } else {
+        $_SESSION['attempts'] += 1;
+        if ($_SESSION['attempts'] >= 3) {
+            echo "<h3>Error Message</h3>";
+            exit;
+        } else {
+            $remaining = 3 - $_SESSION['attempts'];
+            echo "<h3>Incorrect username or password. $remaining attempts left.</h3>";
+        }
+    }
+}
+?>
+
+<!-- First Login Form -->
+<form method="post" action="">
+    Username: <input type="text" name="username" required><br><br>
+    Password: <input type="password" name="password" required><br><br>
+    <input type="submit" name="login" value="Login">
+</form>

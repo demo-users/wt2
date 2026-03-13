@@ -1,0 +1,77 @@
+# transactions_summary.py
+
+# Import necessary libraries
+import pandas as pd
+import re
+import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from collections import defaultdict
+
+# Download NLTK resources (first time only)
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# =========================
+# Step 1: Create Transactions Dataset
+# =========================
+data = {
+    'Transaction_ID': [1, 2, 3, 4, 5],
+    'Description': [
+        "Paid $500 for electricity bill on 12/03/2026.",
+        "Received salary of $4500 on 10/03/2026.",
+        "Bought groceries worth $200 at SuperMart.",
+        "Transferred $1000 to savings account.",
+        "Paid $50 for internet service on 11/03/2026."
+    ]
+}
+
+df = pd.DataFrame(data)
+print("=== Original Transactions Dataset ===")
+print(df)
+
+# =========================
+# Step 2: Preprocess Text
+# =========================
+def clean_text(text):
+    # Remove digits and special characters
+    text = re.sub(r'[^A-Za-z\s]', '', text)
+    # Remove extra spaces
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+df['Cleaned_Description'] = df['Description'].apply(clean_text)
+
+print("\n=== Cleaned Transaction Descriptions ===")
+print(df[['Transaction_ID', 'Cleaned_Description']])
+
+# =========================
+# Step 3: Extractive Summarization
+# =========================
+# Combine all cleaned descriptions into one paragraph
+all_text = ' '.join(df['Cleaned_Description'].tolist())
+
+# Tokenize sentences
+sentences = sent_tokenize(all_text)
+
+# Remove stopwords and compute word frequencies
+stop_words = set(stopwords.words('english'))
+word_frequencies = defaultdict(int)
+
+for sentence in sentences:
+    for word in word_tokenize(sentence.lower()):
+        if word not in stop_words:
+            word_frequencies[word] += 1
+
+# Score sentences based on word frequencies
+sentence_scores = {}
+for sentence in sentences:
+    score = sum(word_frequencies[word] for word in word_tokenize(sentence.lower()) if word in word_frequencies)
+    sentence_scores[sentence] = score
+
+# Select top 2 sentences as summary
+summary_sentences = sorted(sentence_scores, key=sentence_scores.get, reverse=True)[:2]
+summary = ' '.join(summary_sentences)
+
+print("\n=== Extractive Summary of Transactions ===")
+print(summary)

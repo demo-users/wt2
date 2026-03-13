@@ -1,0 +1,64 @@
+<?php
+
+$xml = new DOMDocument();
+$xml->load("Movie.xml");
+
+$movies = $xml->getElementsByTagName("Movie");
+
+foreach($movies as $movie)
+{
+    $title = $movie->getElementsByTagName("MovieTitle")->item(0)->nodeValue;
+    $actor = $movie->getElementsByTagName("ActorName")->item(0)->nodeValue;
+
+    echo "Movie Title : " . $title . "<br>";
+    echo "Actor Name : " . $actor . "<br><br>";
+}
+
+?>
+
+//XML file Movie.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MovieInfo>
+
+<Movie>
+<MovieNo>1</MovieNo>
+<MovieTitle>3 Idiots</MovieTitle>
+<ActorName>Aamir Khan</ActorName>
+<ReleaseYear>2009</ReleaseYear>
+</Movie>
+
+<Movie>
+<MovieNo>2</MovieNo>
+<MovieTitle>Dangal</MovieTitle>
+<ActorName>Aamir Khan</ActorName>
+<ReleaseYear>2016</ReleaseYear>
+</Movie>
+
+<Movie>
+<MovieNo>3</MovieNo>
+<MovieTitle>Bahubali</MovieTitle>
+<ActorName>Prabhas</ActorName>
+<ReleaseYear>2015</ReleaseYear>
+</Movie>
+
+<Movie>
+<MovieNo>4</MovieNo>
+<MovieTitle>KGF</MovieTitle>
+<ActorName>Yash</ActorName>
+<ReleaseYear>2018</ReleaseYear>
+</Movie>
+
+<Movie>
+<MovieNo>5</MovieNo>
+<MovieTitle>Pathaan</MovieTitle>
+<ActorName>Shah Rukh Khan</ActorName>
+<ReleaseYear>2023</ReleaseYear>
+</Movie>
+
+</MovieInfo>
+
+
+
+
