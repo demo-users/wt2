@@ -1,0 +1,30 @@
+<?php
+
+$xml = simplexml_load_file("book.xml") or die("Error: Cannot load XML file");
+
+foreach($xml->book as $b)
+{
+    echo "Book ID: " . $b['id'] . "<br>";
+    echo "Title: " . $b->title . "<br>";
+    echo "Author: " . $b->author . "<br>";
+    echo "Price: " . $b->price . "<br><br>";
+}
+
+?>
+
+//xml files book.html
+
+      <?xml version="1.0"?>
+<books>
+  <book id="1">
+    <title>PHP Programming</title>
+    <author>John</author>
+    <price>500</price>
+  </book>
+
+  <book id="2">
+    <title>Java Programming</title>
+    <author>David</author>
+    <price>600</price>
+  </book>
+</books>
