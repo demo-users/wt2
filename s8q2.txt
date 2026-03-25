@@ -1,0 +1,46 @@
+# Import required libraries
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Step 1: Read the dataset
+df = pd.read_csv('groceries.csv')
+
+# Step 2: Display dataset info
+print("Dataset Information:")
+print(df.info())
+print("\nFirst 5 rows of dataset:")
+print(df.head())
+
+# Step 3: Preprocessing
+# Check for null values
+print("\nNull values in dataset:")
+print(df.isnull().sum())
+
+# Drop nulls if any
+df = df.dropna()
+
+# Step 4: Convert categorical values to numeric (already 0/1 in our CSV)
+# If your dataset has "Yes"/"No", you can do:
+# df = df.applymap(lambda x: 1 if x == 'Yes' else 0)
+
+# Step 5: Apply Apriori algorithm
+frequent_itemsets = apriori(df, min_support=0.6, use_colnames=True)
+
+print("\nFrequent Itemsets:")
+print(frequent_itemsets)
+
+# Step 6: Generate association rules
+rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+
+print("\nAssociation Rules:")
+print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])
+
+
+
+  // groceries.csv
+Milk,Bread,Butter,Cheese,Diaper,Eggs,Coke
+1,1,0,0,1,1,0
+1,1,0,0,0,1,0
+0,1,1,0,1,0,1
+1,0,1,0,1,0,1
+0,1,0,1,0,1,1
